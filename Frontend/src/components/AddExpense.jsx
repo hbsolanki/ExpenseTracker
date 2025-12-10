@@ -1,0 +1,127 @@
+import React, { useState } from "react";
+import axios from "../utils/axios";
+import { useNavigate } from "react-router-dom";
+
+export default function AddExpense() {
+  const CATEGORY_CHOICES = [
+    { value: "FOOD", label: "Food" },
+    { value: "TRAVEL", label: "Travel" },
+    { value: "BILLS", label: "Bills" },
+    { value: "SHOPPING", label: "Shopping" },
+  ];
+
+  const navigate = useNavigate();
+
+  const [title, setTitle] = useState("");
+  const [amount, setAmount] = useState("");
+  const [category, setCategory] = useState("");
+  const [date, setDate] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      const response = await axios.post("/expense/", {
+        title,
+        amount,
+        category,
+        date,
+      });
+
+      setSuccess("Expense added successfully!");
+
+      navigate("/");
+    } catch (err) {
+      setError(err.response?.data?.error || "Failed to add expense");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-white px-4">
+      <div className="w-full max-w-md bg-white shadow-md hover:shadow-lg transition rounded-xl border border-black/5 p-8">
+        <h2 className="text-3xl font-extrabold text-center text-black mb-6">
+          Add Expense
+        </h2>
+
+        {error && (
+          <p className="mb-4 text-red-600 text-sm text-center font-medium">
+            {error}
+          </p>
+        )}
+
+        {success && (
+          <p className="mb-4 text-white text-sm text-center bg-blue-600 py-2 rounded-md font-medium">
+            {success}
+          </p>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label className="text-black text-sm font-semibold">Title</label>
+            <input
+              type="text"
+              placeholder="Enter expense title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="mt-1 block w-full rounded-md border border-black/20 px-3 py-2 text-black"
+            />
+          </div>
+
+          <div>
+            <label className="text-black text-sm font-semibold">Amount</label>
+            <input
+              type="number"
+              step="0.01"
+              placeholder="Enter amount"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              className="mt-1 block w-full rounded-md border border-black/20 px-3 py-2 text-black"
+            />
+          </div>
+
+          <div>
+            <label className="text-black text-sm font-semibold">Category</label>
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="mt-1 block w-full rounded-md border border-black/20 px-3 py-2 text-black"
+            >
+              <option value="">Select category</option>
+              {CATEGORY_CHOICES.map((cat) => (
+                <option key={cat.value} value={cat.value}>
+                  {cat.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="text-black text-sm font-semibold">Date</label>
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              className="mt-1 block w-full rounded-md border border-black/20 px-3 py-2 text-black"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-blue-600 text-white font-semibold rounded-md py-2 hover:bg-blue-500 disabled:opacity-50"
+          >
+            {loading ? "Adding..." : "Add Expense"}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
