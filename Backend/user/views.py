@@ -8,12 +8,14 @@ from .models import User
 from .authentication import generate_token
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from .serializers import UserSerializer,UserUpdateSerializer
 
 class UserViewSet(viewsets.ModelViewSet):
 
     queryset = User.objects.all()
     lookup_field = "id"
     permission_classes = [IsAuthenticated]
+    serializer_class=UserSerializer
 
     @action(detail=False, methods=['post'], permission_classes=[AllowAny])
     def register(self, request):
@@ -93,3 +95,10 @@ class UserViewSet(viewsets.ModelViewSet):
             "username": user.username,
             "image": user.image.url if user.image else None
         })
+    
+    def update(self, request, *args, **kwargs):
+        user = self.get_object()
+        serializer = UserUpdateSerializer(user, data=request.data, partial=True)  
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=200)

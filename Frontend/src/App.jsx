@@ -7,6 +7,7 @@ import PageNotFound from "./components/utils/PageNotFound";
 
 import PrivateRoute from "./utils/PrivateRoute";
 import PublicRoute from "./utils/PublicRoute";
+import UserEdit from "./components/UserEdit";
 
 function App() {
   return (
@@ -46,6 +47,15 @@ function App() {
           element={
             <PrivateRoute>
               <AddExpense />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/user/edit"
+          element={
+            <PrivateRoute>
+              <UserEdit />
             </PrivateRoute>
           }
         />

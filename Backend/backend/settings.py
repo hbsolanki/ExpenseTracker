@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'user',
     'expense',
-    'corsheaders'
+    'corsheaders',
+    'cloudinary',
+    'cloudinary_storage'
 ]
 
 MIDDLEWARE = [
@@ -173,5 +175,14 @@ CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SAMESITE = 'Lax'
 
 
-MEDIA_URL="/media/"
-MEDIA_ROOT=BASE_DIR/"media"
+# MEDIA_URL="/media/"
+# MEDIA_ROOT=BASE_DIR/"media"
+
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": "dqtpyrdmj",
+    "API_KEY": "788932621222768",
+    "API_SECRET": "0-o7XP5lojzs0g9mro9IVKVSJk4",
+}
+
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+

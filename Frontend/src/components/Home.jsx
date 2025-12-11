@@ -59,7 +59,7 @@ export default function Home() {
 
   return (
     <>
-      <Navbar image={userData ? userData.image : ""} />
+      <Navbar name={userData.name} image={userData ? userData.image : ""} />
 
       <div className="max-w-4xl mx-auto px-4 py-8 space-y-10">
         <div className="bg-blue-100 border border-blue-300 rounded-xl p-6 shadow-md text-center">
