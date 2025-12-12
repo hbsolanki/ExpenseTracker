@@ -186,3 +186,10 @@ CLOUDINARY_STORAGE = {
 
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
+import os
+
+ALLOWED_HOSTS = [
+    os.environ.get("RENDER_EXTERNAL_HOSTNAME", ""),
+    "localhost",
+    "127.0.0.1"
+]
